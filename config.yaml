@@ -17,6 +17,10 @@ data:
   validation_datasets: [CALCE, NASA]
   nominal_capacity_ah: 1.1          # A123 APR18650M1A LFP cells (MATR)
   eol_soh: 0.8                      # cycle life = cycles until 80% of nominal capacity
+  eol_soh_overrides:                # per-dataset conventions
+    NASA: 0.7                       # PCoE convention: EOL at 70% of 2.0 Ah rating;
+                                    # at 0.8 the 100-cycle feature window would
+                                    # overlap EOL (lives 60–98) → leakage
   # Severson feature windows (cycle indices AFTER BatteryML drops cycle 0,
   # i.e. [2, 9, 99] = cycles 3, 10, 100 in 1-based lab numbering — matches
   # the shipped BatteryML configs and the paper's "cycle 100 minus cycle 10")

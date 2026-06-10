@@ -1,0 +1,18 @@
+{
+  "dataset": "NASA",
+  "n_cells": 4,
+  "n_failed": 0,
+  "failed_cells": {},
+  "cycle_life": {
+    "min": 100,
+    "max": 168,
+    "median": 118.5,
+    "n_censored": 1
+  },
+  "nan_counts": {
+    "dq_var": 0,
+    "dq_min": 0,
+    "qd_cycle2": 0,
+    "fade_slope_2_h": 0
+  }
+}
