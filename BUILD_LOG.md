@@ -185,7 +185,31 @@ The `gh` CLI is also logged in (account `TheDeveloperAAA`, scopes `repo`+`workfl
   optimiser process. Phase 1 (which needs torch) runs fine with OMP_NUM_THREADS=1.
 
 ## Phase 3 — Dashboard
+- Five views (predictions+bands, protocol advisor, Pareto explorer, SHAP, live compact model);
+  serves only precomputed artifacts (~400 kB total) + the 68 kB compact booster. The protocol
+  advisor does trilinear interpolation on a precomputed 36×24×36 (C1,Q1,C2) grid of conformal
+  bounds — zero model inference needed for the what-if view; the "live compact model" view is
+  the only one that runs LightGBM, demonstrating the on-controller artifact.
+- Local verification: HTTP 200 + healthy `/_stcore/health` on a real `streamlit run`, plus
+  `streamlit.testing.v1.AppTest` smoke tests (committed in tests/test_app.py): all five views
+  render against the real artifacts with no exception; the advisor's feasibility badge flips
+  correctly at max C-rates. (The IDE preview-server sandbox couldn't exec the venv —
+  PermissionError on pyvenv.cfg — so AppTest is the canonical render check.)
 
 ## Phase 4 — Supporting artifacts
+- Walkthrough notebook generated programmatically (notebooks/build_walkthrough.py) and
+  EXECUTED via nbconvert so committed outputs are real, loaded from results/ — never typed in.
+- README headline table cites Severson Table 1 next to our numbers; research note written for
+  the power-electronics audience (CC current references, DAB CC-CV outer loop, multiport
+  allocation, DSP-class estimator); 6 publication figures at 300 dpi in results/figures.
+- 23 tests green (splits vs BatteryML source, feature definitions on synthetic cells,
+  model stack determinism, conformal coverage sanity, app rendering).
 
 ## Phase 5 — Deployment
+- GitHub: public repo created via gh CLI (account TheDeveloperAAA, repo scope) and pushed —
+  https://github.com/TheDeveloperAAA/battery-fastcharging-ml . Secret scan of the committed
+  tree: clean (no hf_/ghp_/github_pat_ patterns); largest committed file 1 MB.
+- HF Space: created via huggingface_hub (`create_repo(repo_type="space", space_sdk="docker")`,
+  Streamlit-on-Docker per current HF docs — the built-in Streamlit SDK was deprecated
+  2025-04-30); only `app/` uploaded; build status polled via `get_space_runtime`.
+- No runtime secrets needed by the app → no Space secrets set (everything served is public).

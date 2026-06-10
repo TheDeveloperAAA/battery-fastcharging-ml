@@ -6,7 +6,9 @@ the probabilistic predictions to recommend fast-charging protocols that
 **minimise charging time subject to a battery-life guarantee**
 (`P(life ≥ L_min) ≥ 90%`).
 
-**Live dashboard:** _will be filled at deployment_ <!-- SPACE_URL -->
+**Live dashboard:** https://rajtheman-battery-fastcharging-dashboard.hf.space
+(Hugging Face Space, Docker SDK, free tier — first load after a long idle may
+take ~1 min to wake)
 
 Built on public data only: the Toyota Research Institute / Stanford / MIT
 fast-charging dataset (Severson et al. 2019; Attia et al. 2020), validated
@@ -53,7 +55,8 @@ Requires Python 3.11, ~15 GB disk, internet. On macOS: `brew install libomp`
 first (LightGBM links it).
 
 ```bash
-git clone <THIS_REPO> && cd <THIS_REPO>
+git clone https://github.com/TheDeveloperAAA/battery-fastcharging-ml.git
+cd battery-fastcharging-ml
 python3.11 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
