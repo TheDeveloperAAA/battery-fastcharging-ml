@@ -36,3 +36,4 @@ nbformat==5.10.4
 #   git clone https://github.com/microsoft/BatteryML third_party/BatteryML
 #   pip install ./third_party/BatteryML
 # (covered by `make setup` / README reproduce steps)
+pytest==9.0.3

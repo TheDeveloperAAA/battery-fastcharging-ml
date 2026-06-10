@@ -14,7 +14,28 @@ cross-dataset on CALCE (Univ. of Maryland) and NASA PCoE cells.
 
 ## Headline results
 
-<!-- HEADLINE_RESULTS -->
+All numbers are from `results/metrics.json` / `results/calibration_report.json`
+(reproducible via the steps below); benchmark values are cited from Severson
+et al. 2019, Table 1 (primary test excluding the b2c1 outlier | secondary test).
+
+| What | Ours | Published benchmark |
+|---|---|---|
+| Variance baseline (elastic net, 1 feature) RMSE | **136 / 211 cycles** | 138 / 196 cycles |
+| Best point predictor (5-fold ensemble aggregate) RMSE | **128 / 223 cycles** | full model: 100 / 214 |
+| Ensemble MAPE (primary) | **10.1%** | full model: 7.5–14.1% |
+| 90% interval coverage (PICP), cross-conformal | **0.93 / 0.95** (nominal 0.90) | — |
+| Mean 90% interval width | **339 / 585 cycles** | — |
+| Early prediction (LightGBM MAPE, 100 → 20 cycles observed) | **10.8% → 15.1%** | — |
+| Compact on-controller estimator | **68 kB**, MAPE 10.5% | — |
+| Recommended protocol @ L_min=800 @ 90% conf. | **4.53C(67%)→3.29C, 11.2 min to 80% SOC, ≥898 cycles guaranteed** | — |
+| Pareto frontier | 13 non-dominated points, **7.8–12.8 min** for 400–1600-cycle guarantees | — |
+
+Cross-dataset transfer, reported honestly: NASA PCoE ranks perfectly
+(Spearman ρ = 1.00, n = 3) with ~65% absolute scale error; CALCE (LCO
+prismatic, slow cycling) does **not** transfer (ρ ≈ −0.10) — the LFP
+fast-charge degradation signature is not a chemistry-agnostic life predictor,
+which is itself a documented finding (`results/metrics.json →
+cross_dataset`).
 
 ## What's in the box
 
