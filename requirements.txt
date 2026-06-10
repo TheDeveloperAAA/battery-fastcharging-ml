@@ -1,0 +1,38 @@
+# Pinned environment for the battery cycle-life project (Python 3.11, macOS arm64 / Linux).
+# numpy is held <2 because BatteryML (installed from source, see third_party/) pins
+# numpy>=1.24,<2.0.0; every other pin below is verified compatible with numpy 1.26.
+numpy==1.26.4
+pandas==2.2.3
+scipy==1.13.1
+scikit-learn==1.5.2
+h5py==3.11.0
+pyyaml==6.0.2
+tqdm==4.67.1
+requests==2.32.3
+xlrd==2.0.1              # CALCE raw data ships as legacy .xls; pandas needs xlrd to parse
+matplotlib==3.9.2
+plotly==6.8.0
+
+# Modelling
+lightgbm==4.6.0          # macOS: requires `brew install libomp`
+torch==2.12.0            # CPU build; arm64 wheel
+mapie==1.4.1             # v1 API: SplitConformalRegressor / ConformalizedQuantileRegressor
+optuna==4.9.0
+optuna-integration[lightgbm]==4.9.0
+shap==0.49.1             # last release compatible with numpy<2 (0.50+ requires numpy>=2)
+
+# Dashboard (local run; the deployed Space has its own app/requirements.txt)
+streamlit==1.58.0
+
+# Data / deploy tooling
+huggingface_hub==1.18.0
+joblib==1.4.2
+
+# Notebook
+jupyter==1.1.1
+nbformat==5.10.4
+
+# BatteryML is NOT on PyPI — installed from source:
+#   git clone https://github.com/microsoft/BatteryML third_party/BatteryML
+#   pip install ./third_party/BatteryML
+# (covered by `make setup` / README reproduce steps)

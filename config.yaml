@@ -1,0 +1,63 @@
+# Central configuration — all paths, seeds, uncertainty and optimisation settings.
+# Everything downstream reads from this file; change here, not in code.
+
+seed: 42
+
+paths:
+  raw_data: data/raw
+  processed_data: data/processed
+  features: data/features
+  results: results
+  models: models
+  app_artifacts: app/artifacts
+  batteryml_repo: third_party/BatteryML
+
+data:
+  primary_dataset: MATR
+  validation_datasets: [CALCE, NASA]
+  nominal_capacity_ah: 1.1          # A123 APR18650M1A LFP cells (MATR)
+  eol_soh: 0.8                      # cycle life = cycles until 80% of nominal capacity
+  # Severson feature windows (cycle indices AFTER BatteryML drops cycle 0,
+  # i.e. [2, 9, 99] = cycles 3, 10, 100 in 1-based lab numbering — matches
+  # the shipped BatteryML configs and the paper's "cycle 100 minus cycle 10")
+  critical_cycles: [2, 9, 99]
+  interp_dims: 1000                 # voltage grid points for Q(V), 2.0–3.5 V
+  early_cycles: 100                 # "early prediction" horizon
+
+splits:
+  # Canonical Severson splits (cell lists in src/data/splits.py, taken verbatim
+  # from BatteryML's MATR_split.py). Train 41 / primary test 42 (b2c1 outlier
+  # excluded, matching the paper's parenthetical metrics) / secondary test 40.
+  # The calibration set for conformal prediction is carved from TRAIN cells
+  # only (no test leakage).
+  calibration_fraction: 0.35        # of train cells, held out for conformalization
+  cv_folds: 5
+
+uncertainty:
+  alpha: 0.1                        # 1 - alpha = 90% nominal coverage
+  confidence_level: 0.9
+  coverage_tolerance: 0.08          # |empirical - nominal| acceptance band (small n_test)
+
+training:
+  mode: thorough                    # "thorough" = full Optuna search; "fast" = defaults
+  optuna_trials_gbm: 120
+  optuna_trials_seq: 30
+  early_stopping_rounds: 100
+  device: cpu                       # M1, 8 GB RAM; MPS avoided (documented LSTM bugs)
+
+protocol_optimization:
+  # Severson/MATR fast-charge parameterisation: C1 from 0 to Q1% SOC, then C2
+  # to 80% SOC, then (fixed) 1C CC-CV to 100%. 1C = 1.1 A.
+  # Bounds follow the support of the 72 observed protocols (3.6C–8C, Q1 in
+  # steps over 10–70%); we allow mild extrapolation low-side only.
+  c1_bounds: [1.0, 8.0]             # C-rate of first CC step
+  c2_bounds: [1.0, 8.0]             # C-rate of second CC step
+  q1_bounds: [5.0, 75.0]            # SOC (%) where the step switches
+  l_min: 800                        # required cycle life (cycles) at confidence
+  alpha: 0.1                        # constraint: P(life >= L_min) >= 0.9
+  n_trials: 400                     # Bayesian optimisation budget
+  pareto_grid_l_min: [400, 1600, 25]  # sweep L_min from..to..steps for frontier
+
+dashboard:
+  port: 8501
+  title: "Battery Cycle-Life Prediction & Fast-Charging Optimisation"

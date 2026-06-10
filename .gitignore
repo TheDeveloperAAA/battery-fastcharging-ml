@@ -1,0 +1,37 @@
+# Data — large, re-downloadable; never commit
+data/
+
+# Secrets
+.env
+*.token
+.sia_*
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Model checkpoints (large); compact deployable models are whitelisted below
+models/*.pt
+models/*.ckpt
+models/checkpoints/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Logs / scratch
+*.log
+optuna.db
+lightning_logs/
+
+# Anything big that slips through (raw data is re-downloadable)
+*.mat
+*.h5
+*.zip
+*.tar.gz
+third_party/
