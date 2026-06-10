@@ -254,7 +254,7 @@ def pareto_frontier(mapie, bounds: dict, l_grid: np.ndarray,
 def main() -> None:
     cfg = load_config()
     seed = cfg["seed"]
-    seed_everything(seed)
+    seed_everything(seed, torch_too=False)   # no NN here; see seed.py docstring
     po = cfg["protocol_optimization"]
     bounds = {"c1": tuple(po["c1_bounds"]), "c2": tuple(po["c2_bounds"]),
               "q1": tuple(po["q1_bounds"])}

@@ -1,0 +1,49 @@
+{
+  "format": "LightGBM booster text dump (pure C inference via lightgbm/treelite or hand-rolled tree walk)",
+  "n_trees": 120,
+  "num_leaves_max": 7,
+  "max_depth": 3,
+  "n_features": 24,
+  "feature_names": [
+    "avg_charge_time_2_6",
+    "c1",
+    "c2",
+    "charge_time_min",
+    "dq_kurt",
+    "dq_mean",
+    "dq_min",
+    "dq_skew",
+    "dq_var",
+    "fade_intercept_2_h",
+    "fade_intercept_last10",
+    "fade_slope_2_h",
+    "fade_slope_last10",
+    "ir_cycle2",
+    "ir_diff_h_2",
+    "ir_min_2_h",
+    "q1_pct",
+    "qd_cycle2",
+    "qd_max_minus_2",
+    "rate_w1",
+    "rate_w2",
+    "rate_w3",
+    "rate_w4",
+    "temp_integral_2_h"
+  ],
+  "target": "log10(cycle life)",
+  "size_bytes": 69956,
+  "metrics": {
+    "primary_test": {
+      "rmse_cycles": 205.60371570166785,
+      "mae_cycles": 97.75893993818967,
+      "mape_pct": 10.456016853967153,
+      "n": 42
+    },
+    "secondary_test": {
+      "rmse_cycles": 326.1122904868805,
+      "mae_cycles": 209.38676729600783,
+      "mape_pct": 16.69003008369015,
+      "n": 40
+    }
+  }
+}

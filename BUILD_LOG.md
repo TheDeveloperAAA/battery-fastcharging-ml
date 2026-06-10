@@ -139,7 +139,50 @@ The `gh` CLI is also logged in (account `TheDeveloperAAA`, scopes `repo`+`workfl
   dump (~100 kB) — tree walks are trivially portable to a BMS/DSP; metrics reported next to
   the full ensemble's.
 
+### Phase 1 results (final, results/metrics.json + calibration_report.json)
+- Point accuracy (primary | secondary test, RMSE cycles / MAPE %):
+  variance EN **136 / 15.4 | 211 / 11.9** (paper: 138/13.2 | 196/11.4 — faithful reproduction);
+  full EN 138 / 9.3 | 232 / 13.5; LightGBM 228 / 10.8 | 294 / 14.5; CNN 245 / 14.9 | 382 / 25.2;
+  stacked ensemble 165 / 10.1 | 258 / 13.3 (NNLS weights: EN-full 0.75, CNN 0.25, LGBM 0.0 —
+  LGBM zeroed by out-of-fold stacking, it duplicates EN-full's signal with more variance).
+- Conformal @ 90% nominal: **cross-conformal PICP 0.929 (primary) / 0.950 (secondary), MPIW 339 /
+  585 cycles**, point RMSE 128 / 223 (the 5-fold aggregate is the best point predictor overall);
+  split-conformal over-covers (0.95 / 1.00) with much wider intervals (763 / 1096) — expected
+  with only 13 calibration residuals. Headline = cross-conformal; both reported.
+- Early prediction (LightGBM, primary MAPE): 100→20 cycles observed = 10.8% → 15.1%, graceful.
+- Cross-dataset (discharge features, capacity-normalized, MATR-trained): NASA zero-shot MAPE 65%
+  with **Spearman 1.00** (n=3 — ranking transfers, scale doesn't); CALCE zero-shot MAPE 354%,
+  LOO-intercept-corrected 205%, **Spearman −0.10** — the LFP fast-charge degradation signature
+  does not rank LCO slow-cycled prismatic cells. Reported as a finding, not hidden; consistent
+  with the cross-chemistry transfer literature.
+- Compact estimator: 120 trees, ≤7 leaves, **68 kB**, primary MAPE 10.5% / RMSE 206 —
+  within 0.4 pt of the full ensemble's MAPE.
+- SHAP sanity gate passed: top global features dq_min, ir_cycle2, dq_var — ΔQ(V) statistics and
+  internal resistance, physically sensible.
+- Pipeline wall time 60 s on M1 CPU once OpenMP was single-threaded (three earlier aborted runs:
+  libomp deadlock, dict-mutation-during-iteration bug, missing nominal_capacity column in
+  pre-edit NASA CSV — all fixed and documented above).
+
 ## Phase 2 — Protocol optimisation
+
+### Phase 2 decisions
+- The decision layer needs life as a function of the protocol *alone* (no early-cycle data
+  exists for a hypothetical protocol), so a separate **protocol→life surrogate** is trained on
+  the 124-cell cohort: features are deterministic transforms of (C1, Q1, C2) — raw triple,
+  per-20%-SOC-window mean rates, analytic charge time. Surrogate family chosen by 5-fold CV
+  among {quadratic ridge, GP-Matérn, small LightGBM}; conformal layer split-calibrated on 40%
+  of cells held out from surrogate fitting.
+- Reusing Phase-1 test cells to train this surrogate does not contaminate the Phase-1
+  benchmark (different model, no feedback loop) — stated explicitly.
+- Search: Optuna TPE (contract-specified) with infeasible-trial penalty + **dense-grid
+  certification** (3-D space, cheap surrogate → the grid certifies global optimality within
+  resolution). Search domain clamped to the observed protocol support (no extrapolated
+  recommendations); conformal validity is marginal w.r.t. the data-generating protocol mix —
+  documented honestly in code, README and the research note.
+- **Second native crash**: torch + LightGBM + Accelerate-backed sklearn GP in one process
+  segfaults on this macOS/arm64 stack (faulthandler itself crashes during the dump). Phase 2
+  has no neural component → `seed_everything(torch_too=False)` skips the torch import in the
+  optimiser process. Phase 1 (which needs torch) runs fine with OMP_NUM_THREADS=1.
 
 ## Phase 3 — Dashboard
 

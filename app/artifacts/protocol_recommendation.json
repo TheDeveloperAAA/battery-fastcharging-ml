@@ -1,0 +1,64 @@
+{
+  "config": {
+    "l_min": 800,
+    "alpha": 0.1,
+    "n_trials": 400
+  },
+  "surrogate": {
+    "name": "lightgbm_small",
+    "cv_scores": {
+      "quadratic_ridge": {
+        "rmse_cycles": 288.7512912473901,
+        "mae_cycles": 209.09553561080241,
+        "mape_pct": 29.07273353590466,
+        "n": 123
+      },
+      "gp_matern": {
+        "rmse_cycles": 284.44553768320765,
+        "mae_cycles": 198.58712828981945,
+        "mape_pct": 26.2377252266013,
+        "n": 123
+      },
+      "lightgbm_small": {
+        "rmse_cycles": 254.2861837756467,
+        "mae_cycles": 169.0706067203821,
+        "mape_pct": 22.822059006302513,
+        "n": 123
+      }
+    },
+    "n_fit": 74,
+    "n_cal": 49
+  },
+  "bounds": {
+    "c1": [
+      1.0,
+      8.0
+    ],
+    "c2": [
+      3.0,
+      6.0
+    ],
+    "q1": [
+      5.0,
+      75.0
+    ]
+  },
+  "recommended_optuna": {
+    "feasible": true,
+    "l_min": 800,
+    "c1": 4.532217738712784,
+    "q1_pct": 67.37427688145027,
+    "c2": 3.2870559224474856,
+    "charge_time_min": 11.22400444427137,
+    "lower_bound_life": 898.1249751201701
+  },
+  "recommended_grid": {
+    "feasible": true,
+    "l_min": 800,
+    "c1": 4.375,
+    "q1_pct": 69.0,
+    "c2": 3.75,
+    "charge_time_min": 11.22285714285714,
+    "lower_bound_life": 803.665343725116
+  }
+}

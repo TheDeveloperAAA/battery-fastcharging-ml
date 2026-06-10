@@ -1,0 +1,489 @@
+{
+  "benchmark": {
+    "source": "Severson et al., Nature Energy 4, 383-391 (2019), Table 1; doi:10.1038/s41560-019-0356-8",
+    "rmse_cycles": {
+      "variance": {
+        "train": 103,
+        "primary_test": 138,
+        "primary_test_excl_outlier": 138,
+        "secondary_test": 196
+      },
+      "discharge": {
+        "train": 76,
+        "primary_test": 91,
+        "primary_test_excl_outlier": 86,
+        "secondary_test": 173
+      },
+      "full": {
+        "train": 51,
+        "primary_test": 118,
+        "primary_test_excl_outlier": 100,
+        "secondary_test": 214
+      }
+    },
+    "mape_pct": {
+      "variance": {
+        "train": 14.1,
+        "primary_test": 14.7,
+        "primary_test_excl_outlier": 13.2,
+        "secondary_test": 11.4
+      },
+      "discharge": {
+        "train": 9.8,
+        "primary_test": 13.0,
+        "primary_test_excl_outlier": 10.1,
+        "secondary_test": 8.6
+      },
+      "full": {
+        "train": 5.6,
+        "primary_test": 14.1,
+        "primary_test_excl_outlier": 7.5,
+        "secondary_test": 10.7
+      }
+    }
+  },
+  "models": {
+    "elastic_net_variance": {
+      "train_cv": {
+        "rmse_cycles": 128.38320103221318,
+        "mae_cycles": 107.83767369837598,
+        "mape_pct": 17.008178671768107,
+        "n": 41
+      },
+      "primary_test": {
+        "rmse_cycles": 136.28424023660295,
+        "mae_cycles": 109.12671629539578,
+        "mape_pct": 15.397345655230124,
+        "n": 42
+      },
+      "secondary_test": {
+        "rmse_cycles": 211.45089701624048,
+        "mae_cycles": 136.47106076154765,
+        "mape_pct": 11.866590646127772,
+        "n": 40
+      }
+    },
+    "elastic_net_discharge": {
+      "train_cv": {
+        "rmse_cycles": 110.14343117893098,
+        "mae_cycles": 85.9936429892068,
+        "mape_pct": 13.440862302571785,
+        "n": 41
+      },
+      "primary_test": {
+        "rmse_cycles": 314.10607722196903,
+        "mae_cycles": 114.8743381499706,
+        "mape_pct": 14.039949693328296,
+        "n": 42
+      },
+      "secondary_test": {
+        "rmse_cycles": 141.20188960172015,
+        "mae_cycles": 104.3846864814811,
+        "mape_pct": 9.636840655080983,
+        "n": 40
+      }
+    },
+    "elastic_net_full": {
+      "train_cv": {
+        "rmse_cycles": 112.14638474167732,
+        "mae_cycles": 79.34859599346083,
+        "mape_pct": 12.52119048786696,
+        "n": 41
+      },
+      "primary_test": {
+        "rmse_cycles": 137.69219796913177,
+        "mae_cycles": 73.45275491503675,
+        "mape_pct": 9.268584922386506,
+        "n": 42
+      },
+      "secondary_test": {
+        "rmse_cycles": 231.77735891825952,
+        "mae_cycles": 158.34186355007097,
+        "mape_pct": 13.47866400343741,
+        "n": 40
+      }
+    },
+    "lightgbm": {
+      "train_cv": {
+        "rmse_cycles": 251.4670873530217,
+        "mae_cycles": 109.9875291559227,
+        "mape_pct": 13.33812718080518,
+        "n": 41
+      },
+      "primary_test": {
+        "rmse_cycles": 227.80670505147603,
+        "mae_cycles": 104.43147933998446,
+        "mape_pct": 10.792095225304973,
+        "n": 42
+      },
+      "secondary_test": {
+        "rmse_cycles": 294.0660555332289,
+        "mae_cycles": 181.75933797242732,
+        "mape_pct": 14.461435402522804,
+        "n": 40
+      }
+    },
+    "sequence_cnn": {
+      "train_cv": {
+        "rmse_cycles": 229.33449270647452,
+        "mae_cycles": 108.78902219117442,
+        "mape_pct": 12.930980848164209,
+        "n": 41
+      },
+      "primary_test": {
+        "rmse_cycles": 245.10247091020437,
+        "mae_cycles": 137.26413345424947,
+        "mape_pct": 14.934209216011599,
+        "n": 42
+      },
+      "secondary_test": {
+        "rmse_cycles": 381.95648456523884,
+        "mae_cycles": 292.65407119020017,
+        "mape_pct": 25.175638800018866,
+        "n": 40
+      }
+    },
+    "ensemble": {
+      "train_cv": {
+        "rmse_cycles": 181.52566944489226,
+        "mae_cycles": 98.97321064963967,
+        "mape_pct": 13.567279607491608,
+        "n": 41
+      },
+      "primary_test": {
+        "rmse_cycles": 165.4503866604751,
+        "mae_cycles": 87.89662587076239,
+        "mape_pct": 10.100532167411473,
+        "n": 42
+      },
+      "secondary_test": {
+        "rmse_cycles": 257.64563119100455,
+        "mae_cycles": 165.47216263527986,
+        "mape_pct": 13.331869371135612,
+        "n": 40
+      }
+    }
+  },
+  "ensemble_weights": {
+    "elastic_net_full": 0.7524828879340784,
+    "lightgbm": 0.0,
+    "sequence_cnn": 0.24751711206592175
+  },
+  "early_prediction": [
+    {
+      "horizon_cycles": 20,
+      "model": "elastic_net_variance",
+      "rmse_cycles": 338.7954525937572,
+      "mae_cycles": 191.49770056024357,
+      "mape_pct": 23.121783134211903,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 20,
+      "model": "lightgbm",
+      "rmse_cycles": 244.21184831648407,
+      "mae_cycles": 134.01495256769715,
+      "mape_pct": 15.101148657471168,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 30,
+      "model": "elastic_net_variance",
+      "rmse_cycles": 266.47291866858546,
+      "mae_cycles": 169.49465337752932,
+      "mape_pct": 20.80777627560465,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 30,
+      "model": "lightgbm",
+      "rmse_cycles": 239.1695336929722,
+      "mae_cycles": 126.11225122010687,
+      "mape_pct": 13.633129588720319,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 40,
+      "model": "elastic_net_variance",
+      "rmse_cycles": 174.1611596950405,
+      "mae_cycles": 127.89716727635638,
+      "mape_pct": 17.96637386828656,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 40,
+      "model": "lightgbm",
+      "rmse_cycles": 237.89587850941044,
+      "mae_cycles": 119.55218877517034,
+      "mape_pct": 12.911841091911041,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 50,
+      "model": "elastic_net_variance",
+      "rmse_cycles": 154.19894577995683,
+      "mae_cycles": 108.7774448149127,
+      "mape_pct": 14.295024637257702,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 50,
+      "model": "lightgbm",
+      "rmse_cycles": 237.35563270565922,
+      "mae_cycles": 111.89617021812448,
+      "mape_pct": 11.494103094196294,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 60,
+      "model": "elastic_net_variance",
+      "rmse_cycles": 203.46163494998345,
+      "mae_cycles": 140.25333579626073,
+      "mape_pct": 17.871115218766764,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 60,
+      "model": "lightgbm",
+      "rmse_cycles": 228.01957105491527,
+      "mae_cycles": 119.54641553090546,
+      "mape_pct": 12.809706347229966,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 70,
+      "model": "elastic_net_variance",
+      "rmse_cycles": 137.54517565802738,
+      "mae_cycles": 110.16783075317012,
+      "mape_pct": 15.676319109088114,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 70,
+      "model": "lightgbm",
+      "rmse_cycles": 249.83717102560703,
+      "mae_cycles": 127.67524288187438,
+      "mape_pct": 13.758135839085545,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 80,
+      "model": "elastic_net_variance",
+      "rmse_cycles": 186.2097793214241,
+      "mae_cycles": 130.43294759547044,
+      "mape_pct": 17.073775517072526,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 80,
+      "model": "lightgbm",
+      "rmse_cycles": 208.61190832452735,
+      "mae_cycles": 112.55686935859815,
+      "mape_pct": 12.745755833371582,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 90,
+      "model": "elastic_net_variance",
+      "rmse_cycles": 159.03084000624676,
+      "mae_cycles": 115.03484799619662,
+      "mape_pct": 15.57306733408452,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 90,
+      "model": "lightgbm",
+      "rmse_cycles": 221.2212376065912,
+      "mae_cycles": 107.5572846226243,
+      "mape_pct": 11.513551694616247,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 100,
+      "model": "elastic_net_variance",
+      "rmse_cycles": 136.28424023660295,
+      "mae_cycles": 109.12671629539578,
+      "mape_pct": 15.397345655230124,
+      "n": 42
+    },
+    {
+      "horizon_cycles": 100,
+      "model": "lightgbm",
+      "rmse_cycles": 227.80670505147603,
+      "mae_cycles": 104.43147933998446,
+      "mape_pct": 10.792095225304973,
+      "n": 42
+    }
+  ],
+  "cross_dataset": {
+    "features": [
+      "dq_min",
+      "dq_var",
+      "dq_skew",
+      "dq_kurt",
+      "qd_cycle2",
+      "qd_max_minus_2"
+    ],
+    "note": "capacity-normalized; censored cells excluded; expect degradation across chemistry (LFP\u2192LCO)",
+    "calce": {
+      "zero_shot": {
+        "rmse_cycles": 4774.039256911405,
+        "mae_cycles": 1895.0632397982076,
+        "mape_pct": 354.2380987115962,
+        "n": 13
+      },
+      "loo_intercept_corrected": {
+        "rmse_cycles": 3039.744310797306,
+        "mae_cycles": 1093.5562606811195,
+        "mape_pct": 205.45909873538872,
+        "n": 13
+      },
+      "spearman_rank_corr": -0.10178826685793495,
+      "cells": [
+        "CALCE_CS2_33",
+        "CALCE_CS2_34",
+        "CALCE_CS2_35",
+        "CALCE_CS2_36",
+        "CALCE_CS2_37",
+        "CALCE_CS2_38",
+        "CALCE_CX2_16",
+        "CALCE_CX2_33",
+        "CALCE_CX2_34",
+        "CALCE_CX2_35",
+        "CALCE_CX2_36",
+        "CALCE_CX2_37",
+        "CALCE_CX2_38"
+      ],
+      "pred_cycle_life": [
+        1282.263920873989,
+        2184.692272737823,
+        492.03644619632837,
+        262.282513996732,
+        670.5406214256858,
+        125.22900379237262,
+        1177.543524032328,
+        17530.25148304426,
+        1653.3861774488769,
+        1736.0963027218502,
+        1191.0333939143306,
+        1245.8816825639983,
+        1053.6807025989913
+      ],
+      "pred_cycle_life_loo": [
+        679.2229517610195,
+        1215.2758493586246,
+        238.82409416004083,
+        121.42681651171739,
+        332.8664516966927,
+        53.81787532113416,
+        591.1047205769121,
+        11430.993044037301,
+        885.5619807331312,
+        908.7124955183592,
+        622.1984047939686,
+        647.368992390592,
+        539.0623714719478
+      ],
+      "true_cycle_life": [
+        473,
+        448,
+        518,
+        487,
+        539,
+        568,
+        828,
+        534,
+        534,
+        739,
+        519,
+        579,
+        590
+      ]
+    },
+    "nasa": {
+      "zero_shot": {
+        "rmse_cycles": 77.24107114561204,
+        "mae_cycles": 74.04942650037441,
+        "mape_pct": 64.84007949275691,
+        "n": 3
+      },
+      "loo_intercept_corrected": {
+        "rmse_cycles": 82.73146453649038,
+        "mae_cycles": 82.0903524093516,
+        "mape_pct": 72.96018723594769,
+        "n": 3
+      },
+      "spearman_rank_corr": 1.0,
+      "cells": [
+        "NASA_B0005",
+        "NASA_B0006",
+        "NASA_B0018"
+      ],
+      "pred_cycle_life": [
+        215.83168463325964,
+        200.30923823120597,
+        56.992643363342616
+      ],
+      "pred_cycle_life_loo": [
+        213.77864597835656,
+        201.92448569571164,
+        32.43207444601362
+      ],
+      "true_cycle_life": [
+        125,
+        112,
+        100
+      ]
+    }
+  },
+  "compact_model": {
+    "format": "LightGBM booster text dump (pure C inference via lightgbm/treelite or hand-rolled tree walk)",
+    "n_trees": 120,
+    "num_leaves_max": 7,
+    "max_depth": 3,
+    "n_features": 24,
+    "feature_names": [
+      "avg_charge_time_2_6",
+      "c1",
+      "c2",
+      "charge_time_min",
+      "dq_kurt",
+      "dq_mean",
+      "dq_min",
+      "dq_skew",
+      "dq_var",
+      "fade_intercept_2_h",
+      "fade_intercept_last10",
+      "fade_slope_2_h",
+      "fade_slope_last10",
+      "ir_cycle2",
+      "ir_diff_h_2",
+      "ir_min_2_h",
+      "q1_pct",
+      "qd_cycle2",
+      "qd_max_minus_2",
+      "rate_w1",
+      "rate_w2",
+      "rate_w3",
+      "rate_w4",
+      "temp_integral_2_h"
+    ],
+    "target": "log10(cycle life)",
+    "size_bytes": 69956,
+    "metrics": {
+      "primary_test": {
+        "rmse_cycles": 205.60371570166785,
+        "mae_cycles": 97.75893993818967,
+        "mape_pct": 10.456016853967153,
+        "n": 42
+      },
+      "secondary_test": {
+        "rmse_cycles": 326.1122904868805,
+        "mae_cycles": 209.38676729600783,
+        "mape_pct": 16.69003008369015,
+        "n": 40
+      }
+    }
+  },
+  "wall_time_s": 60.3
+}

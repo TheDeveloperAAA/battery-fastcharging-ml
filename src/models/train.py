@@ -255,7 +255,13 @@ def main() -> None:
     # Cross-dataset transfer (capacity-normalized discharge features)
     # ------------------------------------------------------------------ #
     print("[5/7] cross-dataset transfer")
-    metrics["cross_dataset"] = cross_dataset_eval(cfg, seed)
+    try:
+        metrics["cross_dataset"] = cross_dataset_eval(cfg, seed)
+    except Exception as exc:  # noqa: BLE001 — never lose the main artifacts
+        import traceback
+        traceback.print_exc()
+        metrics["cross_dataset"] = {"error": f"{type(exc).__name__}: {exc}",
+                                    "note": "re-run with --only-cross"}
 
     # ------------------------------------------------------------------ #
     # Compact estimator
@@ -304,6 +310,8 @@ def cross_dataset_eval(cfg, seed: int) -> dict:
     cols = FEATURE_SETS["discharge"]
 
     def norm_matrix(df: pd.DataFrame) -> np.ndarray:
+        if "nominal_capacity_ah" not in df:
+            df = df.assign(nominal_capacity_ah=1.1)
         c = df["nominal_capacity_ah"].to_numpy() / 1.1
         X = df[cols].to_numpy(dtype=float).copy()
         for j, name in enumerate(cols):
@@ -343,11 +351,25 @@ def cross_dataset_eval(cfg, seed: int) -> dict:
         if df.empty:
             out[ds] = "no eligible cells"
             continue
+        y_true = df["log_cycle_life"].to_numpy()
         yp = model.predict(norm_matrix(df))
-        out[ds] = {**point_metrics(df["log_cycle_life"].to_numpy(), yp),
-                   "cells": df.cell_id.tolist(),
-                   "pred_cycle_life": [float(v) for v in to_cycles(yp)],
-                   "true_cycle_life": df.cycle_life.tolist()}
+        from scipy.stats import spearmanr
+        rho = (float(spearmanr(y_true, yp).statistic)
+               if len(y_true) >= 3 else float("nan"))
+        # few-shot variant: leave-one-out intercept correction on the log
+        # scale — does the *signal* transfer once the chemistry-specific
+        # life scale is removed?
+        yp_loo = np.array([
+            yp[i] + float(np.mean(np.delete(y_true - yp, i)))
+            for i in range(len(yp))])
+        out[ds] = {
+            "zero_shot": point_metrics(y_true, yp),
+            "loo_intercept_corrected": point_metrics(y_true, yp_loo),
+            "spearman_rank_corr": rho,
+            "cells": df.cell_id.tolist(),
+            "pred_cycle_life": [float(v) for v in to_cycles(yp)],
+            "pred_cycle_life_loo": [float(v) for v in to_cycles(yp_loo)],
+            "true_cycle_life": df.cycle_life.tolist()}
     return out
 
 
