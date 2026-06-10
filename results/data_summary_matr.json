@@ -1,0 +1,31 @@
+{
+  "dataset": "MATR",
+  "n_cells": 180,
+  "n_failed": 0,
+  "failed_cells": {},
+  "cycle_life": {
+    "min": 148,
+    "max": 2237,
+    "median": 782.0,
+    "n_censored": 2
+  },
+  "train_cells": 41,
+  "train_missing": [],
+  "primary_test_cells": 42,
+  "primary_test_missing": [],
+  "secondary_test_cells": 40,
+  "secondary_test_missing": [],
+  "splits_disjoint": true,
+  "corr_dq_var_vs_log_life": -0.9057423552874769,
+  "labeler_vs_official": {
+    "n_compared": 88,
+    "median_abs_diff_cycles": 1.0,
+    "max_abs_diff_cycles": 1.0
+  },
+  "nan_counts": {
+    "dq_var": 0,
+    "dq_min": 0,
+    "qd_cycle2": 0,
+    "fade_slope_2_h": 0
+  }
+}

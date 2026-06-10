@@ -377,5 +377,23 @@ def export_compact(X_scalar_tr, y_tr, data, n_scalar, seed,
     return meta
 
 
+def refresh_cross_dataset() -> None:
+    """Recompute only the cross-dataset block of metrics.json (used when
+    CALCE/NASA features finish building after the main training run)."""
+    cfg = load_config()
+    seed_everything(cfg["seed"])
+    results_dir = REPO_ROOT / cfg["paths"]["results"]
+    artifacts = REPO_ROOT / cfg["paths"]["app_artifacts"]
+    metrics = json.load(open(results_dir / "metrics.json"))
+    metrics["cross_dataset"] = cross_dataset_eval(cfg, cfg["seed"])
+    json.dump(metrics, open(results_dir / "metrics.json", "w"), indent=2)
+    json.dump(metrics, open(artifacts / "metrics.json", "w"), indent=2)
+    print(json.dumps(metrics["cross_dataset"], indent=2)[:2000])
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+    if "--only-cross" in sys.argv:
+        refresh_cross_dataset()
+    else:
+        main()
