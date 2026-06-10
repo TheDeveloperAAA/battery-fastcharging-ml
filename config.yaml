@@ -52,8 +52,9 @@ training:
 protocol_optimization:
   # Severson/MATR fast-charge parameterisation: C1 from 0 to Q1% SOC, then C2
   # to 80% SOC, then (fixed) 1C CC-CV to 100%. 1C = 1.1 A.
-  # Bounds follow the support of the 72 observed protocols (3.6C–8C, Q1 in
-  # steps over 10–70%); we allow mild extrapolation low-side only.
+  # Bounds cover the support of the 72 observed protocols (the data includes
+  # 1C-first-step policies; C1 spans 1–8C, Q1 2–80%, C2 3–6C); the optimiser
+  # additionally clamps to the per-parameter ranges found in the data.
   c1_bounds: [1.0, 8.0]             # C-rate of first CC step
   c2_bounds: [1.0, 8.0]             # C-rate of second CC step
   q1_bounds: [5.0, 75.0]            # SOC (%) where the step switches

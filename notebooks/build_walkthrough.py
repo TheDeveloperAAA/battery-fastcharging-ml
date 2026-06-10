@@ -99,7 +99,8 @@ rel.plot(x='nominal', y='empirical', marker='o', figsize=(5,4),
     md("""## 4. Early prediction — how soon can we know?
 
 The same pipeline run with fewer observed cycles. Error rises gracefully as
-the horizon shrinks — at 100 cycles (≈5–8% of life) prediction is already
+the horizon shrinks — at 100 cycles (~13% of the median cell's life)
+prediction is already
 actionable."""),
     code("""ep = pd.DataFrame(metrics['early_prediction'])
 ep.pivot_table(index='horizon_cycles', columns='model',

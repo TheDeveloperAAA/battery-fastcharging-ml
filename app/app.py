@@ -135,7 +135,8 @@ if view == "Cycle-life predictions":
 
     st.markdown(
         "Each point is one battery cell, predicted **after observing only "
-        "its first 100 cycles** (3–8% of its life). Vertical bars are 90% "
+        "its first 100 cycles** (~13% of the median cell's life). "
+        "Vertical bars are 90% "
         "conformal intervals — calibrated, not eyeballed: across held-out "
         "cells, ~90% of the bars cross the diagonal.")
 

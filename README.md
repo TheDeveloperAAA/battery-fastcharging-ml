@@ -30,7 +30,7 @@ et al. 2019, Table 1 (primary test excluding the b2c1 outlier | secondary test).
 | Early prediction (LightGBM MAPE, 100 → 20 cycles observed) | **10.8% → 15.1%** | — |
 | Compact on-controller estimator | **68 kB**, MAPE 10.5% | — |
 | Recommended protocol @ L_min=800 @ 90% conf. | **4.53C(67%)→3.29C, 11.2 min to 80% SOC, ≥898 cycles guaranteed** | — |
-| Pareto frontier | 13 non-dominated points, **7.8–12.8 min** for 400–1600-cycle guarantees | — |
+| Pareto frontier | 13 non-dominated points, **7.8–12.8 min** for 400–1100-cycle guarantees (sweep ran to 1600; above 1100 no tested-family protocol satisfies the 90% bound) | — |
 
 Cross-dataset transfer, reported honestly: NASA PCoE ranks perfectly
 (Spearman ρ = 1.00, n = 3) with ~65% absolute scale error; CALCE (LCO
