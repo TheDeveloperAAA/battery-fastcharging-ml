@@ -109,6 +109,36 @@ The `gh` CLI is also logged in (account `TheDeveloperAAA`, scopes `repo`+`workfl
 
 ## Phase 1 — Probabilistic predictor
 
+### Labels
+- The strict threshold-crossing labeler flagged 92/180 MATR cells "censored": batches 1 and 3
+  were *terminated at* EOL with final capacity a hair above 0.88 Ah (e.g. min 0.8820). Fix:
+  use the dataset's own per-cell `cycle_life` field (what Severson's metrics use), extracted
+  lazily via h5py (`src/data/matr_official_life.py`) with the +[662,981,1060,208,482]
+  continuation rule. Cross-check: where our labeler did fire, it agrees with the official
+  label within **1 cycle** (88 cells compared). 2 batch-4 cells lack the official field and
+  stay censored.
+
+### Architecture / training decisions
+- Single design contract: `X = [scalar features | flattened sequence block]`; every model is
+  sklearn-compatible and slices internally → the whole stacked ensemble (elastic-net "full",
+  LightGBM, two-branch 1D-CNN with NNLS stacking weights from out-of-fold predictions) can be
+  cloned and refit by MAPIE's CrossConformalRegressor.
+- Conformal: BOTH split-conformal (contract-specified; prefit ensemble + 13 calibration cells
+  carved from train) and cross-conformal ("plus", 5-fold over all 41 train cells). With n=41,
+  split-conformal quantiles are coarse (13 calibration residuals); cross-conformal is the
+  statistically sensible headline. Both reported.
+- **macOS OpenMP deadlock**: first training run hung at 0% CPU inside
+  `libomp __kmp_fork_barrier` — torch vendors its own libomp while LightGBM links Homebrew's;
+  two OpenMP runtimes in one process deadlock at the first parallel barrier. Fix:
+  `OMP_NUM_THREADS=1` (set in `train.py` before imports) + LightGBM `n_jobs=1`. No speed
+  cost at n=41.
+- Optuna search space deliberately conservative (num_leaves ≤ 15, depth ≤ 5, strong
+  regularisation): 41 training points overfit instantly otherwise. `n_estimators` taken from
+  the median early-stopped iteration across CV folds.
+- Compact estimator: 120-tree LightGBM (≤7 leaves, depth ≤3) exported as a plain-text booster
+  dump (~100 kB) — tree walks are trivially portable to a BMS/DSP; metrics reported next to
+  the full ensemble's.
+
 ## Phase 2 — Protocol optimisation
 
 ## Phase 3 — Dashboard

@@ -20,6 +20,14 @@ Run:  PYTHONPATH=. .venv/bin/python -m src.models.train
 
 from __future__ import annotations
 
+import os
+
+# torch vendors its own libomp while LightGBM links Homebrew's — two OpenMP
+# runtimes in one process deadlock at the first parallel barrier on macOS.
+# Single-threaded OpenMP avoids it entirely (n=41 cells; parallelism is
+# worthless here anyway). Must be set before either library is imported.
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+
 import json
 import time
 from pathlib import Path
@@ -140,7 +148,8 @@ def main() -> None:
     print("[2/7] point metrics")
     metrics: dict = {"benchmark": SEVERSON_BENCHMARK, "models": {}}
     preds_rows = []
-    for name, model in models.items():
+    ensemble_fitted = None
+    for name, model in list(models.items()):
         fitted = clone(model).fit(X_tr, y_tr)
         entry = {"train_cv": cv_point_metrics(model, X_tr, y_tr, seed)}
         for split in ("primary_test", "secondary_test"):
@@ -158,7 +167,7 @@ def main() -> None:
                 c: float(w) for c, w in zip(
                     ["elastic_net_full", "lightgbm", "sequence_cnn"],
                     fitted.weights_)}
-            models["ensemble_fitted"] = fitted
+            ensemble_fitted = fitted
         print(f"  {name}: primary RMSE "
               f"{entry['primary_test']['rmse_cycles']:.0f} cyc, "
               f"MAPE {entry['primary_test']['mape_pct']:.1f}%")
@@ -272,7 +281,7 @@ def main() -> None:
               indent=2)
     json.dump(metrics, open(artifacts / "metrics.json", "w"), indent=2)
 
-    joblib.dump({"ensemble": models["ensemble_fitted"],
+    joblib.dump({"ensemble": ensemble_fitted,
                  "mapie_split": mapie_split,
                  "mapie_cross": mapie_cross,
                  "scalar_cols": list(SCALAR_COLS),

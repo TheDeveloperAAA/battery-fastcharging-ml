@@ -45,7 +45,7 @@ class ScalarLGBM(BaseEstimator, RegressorMixin):
         if self.params:
             p.update(self.params)
         self.model_ = LGBMRegressor(random_state=self.random_state,
-                                    deterministic=True, n_jobs=4, **p)
+                                    deterministic=True, n_jobs=1, **p)
         self.model_.fit(np.asarray(X)[:, :self.n_scalar], y)
         return self
 
@@ -63,7 +63,7 @@ def tune_lgbm(X_scalar: np.ndarray, y: np.ndarray, n_trials: int = 120,
         errs, iters = [], []
         for tr, va in kf.split(X_scalar):
             model = LGBMRegressor(random_state=seed, deterministic=True,
-                                  n_jobs=4, verbose=-1, n_estimators=2000,
+                                  n_jobs=1, verbose=-1, n_estimators=2000,
                                   **params)
             model.fit(X_scalar[tr], y[tr],
                       eval_set=[(X_scalar[va], y[va])],

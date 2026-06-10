@@ -1,0 +1,16 @@
+{
+  "params": {
+    "learning_rate": 0.16590210698272606,
+    "num_leaves": 7,
+    "max_depth": 4,
+    "min_child_samples": 5,
+    "subsample": 0.7577527587459424,
+    "colsample_bytree": 0.5155992619863943,
+    "reg_alpha": 0.0004664047361137072,
+    "reg_lambda": 0.006107860869411977,
+    "n_estimators": 22,
+    "subsample_freq": 1
+  },
+  "cv_rmse_log": 0.07617858464334823,
+  "n_trials": 120
+}

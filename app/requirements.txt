@@ -1,0 +1,7 @@
+# Deployed dashboard only — deliberately tiny (free-tier Space).
+streamlit==1.58.0
+plotly==6.8.0
+pandas==2.2.3
+numpy==1.26.4
+scipy==1.13.1
+lightgbm==4.6.0

@@ -1,0 +1,18 @@
+{
+  "dataset": "CALCE",
+  "n_cells": 13,
+  "n_failed": 0,
+  "failed_cells": {},
+  "cycle_life": {
+    "min": 448,
+    "max": 828,
+    "median": 534.0,
+    "n_censored": 0
+  },
+  "nan_counts": {
+    "dq_var": 0,
+    "dq_min": 0,
+    "qd_cycle2": 0,
+    "fade_slope_2_h": 0
+  }
+}
